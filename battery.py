@@ -1,19 +1,7 @@
-# pip install psutil
-import psutil
+from battery_status import get_battery_status
+from notification import send_low_battery_notification
 
-battery = psutil.sensors_battery()
-plugged = battery.power_plugged
-percent = battery.percent
+percent, plugged = get_battery_status()
 
-if percent <= 30 and plugged!=True:
- 
-    # pip install py-notifier
-    # pip install win10toast
-    from pynotifier import Notification
-
-    Notification(
-        title="Battery Low",
-        description=str(percent) + "% Battery remain!!",
-        duration=5,  # Duration in seconds
-        
-    ).send()
+if percent <= 30 and not plugged:
+    send_low_battery_notification(percent)
